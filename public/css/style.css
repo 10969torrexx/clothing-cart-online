@@ -1782,6 +1782,10 @@ section {
   transition: 0.3s;
 }
 
+.text-one {
+  color: #AF7C31;
+}
+
 #footer .footer-top .social-links a:hover {
   background: #253D38;
   color: #fff;
