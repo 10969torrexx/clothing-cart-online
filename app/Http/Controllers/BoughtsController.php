@@ -21,7 +21,8 @@ class BoughtsController extends Controller
             'boughts.id',
             'boughts.*'
         )
-        ->orderBy('boughts.id')
+        ->where('boughts.user_id',  Auth::user()->id)
+        ->orderBy('boughts.id', 'desc')
         ->get();
 
         return view('pages.purchase-list', compact('boughts'));

@@ -1831,3 +1831,8 @@ section {
 .card-header {
   background-color: white;
 }
+
+.bg-color-primary {
+  background-color: #AF7C31 !important;
+  border: 0px !important;
+}

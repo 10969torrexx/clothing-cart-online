@@ -58,9 +58,11 @@
                     </ul>
                 </li>
             @else
+                <li><a class="nav-link   scrollto" href="{{ route('purchase-list') }}">Purchases</a></li>
                 <li class="dropdown"><a href="#"><span>{{ Auth::user()->name }}</span> <i class="bi bi-chevron-down"></i></a>
                     <ul>
-                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                    <li><a href="{{ route('user-profile') }}">Profile</a></li>
+                    <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
@@ -88,8 +90,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Product Name</th>
-                                <th>Product Price</th>
                                 <th>Product Category</th>
+                                <th>Product Price</th>
                                 <th>Quantity</th>
                                 <th>Total Price</th>
                                 <th>Payment</th>
@@ -102,7 +104,7 @@
                                 <tr> 
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ ucwords($item->product_name) }}</td>
-                                    <td>{{ $productsController->showProductTypes()[$item->category] }}</td>
+                                    <td>{{ $productsController->showProductTypes()[$item->category - 1] }}</td>
                                     <td>{{ $item->price }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>₱ {{ number_format($item->total_price, 2, '.', ',')  }}</td>
