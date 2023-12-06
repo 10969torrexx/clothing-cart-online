@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\BoughtsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,5 +21,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::middleware(['auth'])->group(function () {
+    // Your authenticated routes go here
+
+    Route::get('/details', [ProductsController::class, 'show'])->name('product-detail');
+
+    Route::post('/buy-now', [BoughtsController::class, 'store'])->name('buy-now');
+});
 
 
