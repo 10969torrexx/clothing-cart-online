@@ -48,7 +48,7 @@
       <nav id="navbar" class="navbar">
         <ul>
             <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-            <li><a class="nav-link   scrollto" href="#portfolio">Products</a></li>
+            <li><a class="nav-link   scrollto" href="#products">Products</a></li>
             @guest
                 <li class="dropdown"><a href="#"><span>Get Started</span> <i class="bi bi-chevron-down"></i></a>
                     <ul>
