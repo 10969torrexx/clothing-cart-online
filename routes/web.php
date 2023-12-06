@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\BoughtsController;
+use App\Http\Controllers\UsersController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,7 +31,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/buy-now', [BoughtsController::class, 'store'])->name('buy-now');
 
-    Route::get('purchases', [BoughtsController::class, 'index'])->name('purchase-list');
+    Route::get('/purchases', [BoughtsController::class, 'index'])->name('purchase-list');
+
+    Route::get('/user-profile', [UsersController::class, 'index'])->name('user-profile');
+
+    Route::post('/info-change', [UsersController::class, 'update'])->name('info-change');
 });
 
 

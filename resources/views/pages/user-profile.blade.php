@@ -80,40 +80,67 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card shadow col-10">
-                <div class="card-header"><h5>Product Detail</h5></div>
-                <div class="card-body row">
-                    <div class="col-6 row justify-content-center">
-                        <img src="{{ $product->img }}" class="col-8" alt="">
-                    </div>
-                    <div class="col-6">
-                        <form class="p-1" action="{{ route('buy-now') }}" method="post"> @csrf
-                            <input type="text" class="form-control d-none" hidden name="productId" value="{{ $product->id }}">
-                            <input type="text" class="form-control d-none" name="quantity" hidden id="finalQuantity">
-                            <input type="text" class="form-control" id="finalTotalPrice" hidden name="totalPrice" id="finalQuantity">
-                            <p><strong>Product Name:</strong> {{ ucwords($product->product_name) }}</p>
-                            <p data-price="{{ $product->price }}" id="price"><strong>Price:</strong> ₱ {{ number_format($product->price, 2, '.', ',')  }}</p>
-                            <p><strong>Quantity: </strong><span id="quantity">0</span></p>
-                            <p><strong>Total Price: </strong><span id="totalPrice">₱ 0.00</span></p>
-                            <p><strong>Set Quantity</strong></p>
-                            <div class="row justify-content-center">
-                               <a href="#" id="addOne" class="col-5 mx-1 btn btn-secondary scrollto">+</a>
-                               <a href="#" id="minusOne" class="col-5 mx-1 btn btn-secondary scrollto">-</a>
+            <div class="card shadow col-8">
+                <div class="card-header"><h5>User Profile</h5></div>
+                <div class="card-body row justify-content-center">
+                   <div class="col-6">
+                        <form action="{{ route('info-change') }}" method="post">
+                            @csrf
+                            <input type="text" name="changeType" value="0" class="form-control">
+                            <div class="form-group p-1">
+                                <label for="">Name</label>
+                                <input id="name" value="{{ $user->name }}" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+    
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="form-group">
-                                <label for=""><strong>Payment</strong></label>
-                                <input type="number" class="form-control" name="payment" id="payment">
+
+                            <div class="form-group p-1">
+                                <label for="">Email</label>
+                                <input id="email" value="{{ $user->email }}" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+    
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-                            <div class="form-group">
-                                <label for=""><strong>Change</strong></label>
-                                <p id="change">₱ 0.00</p>
-                                <input type="number" class="form-control d-none" id="finalChange" name="change">
+
+                            <div class="form-group pt-2">
+                                <button class="btn btn-get-started scrollto" type="submit">Confirm Changes</button>
                             </div>
-                            <div class="row justify-content-center" id="submitButton">
-                                <button class="col-10 btn btn-get-started scrollto" type="submit">Buy now</button>
-                            </div>
+                            
                         </form>
-                    </div>
+                   </div>
+                   <div class="col-6">
+                        <form action="{{ route('info-change') }}" method="post">
+                            @csrf
+                            <input type="text" name="changeType" value="1" class="form-control">
+                            <div class="form-group p-1">
+                                <label for="">Password</label>
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group p-1">
+                                <label for="">Confirm Password</label>
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+
+                            <div class="form-group pt-2">
+                                <button class="btn btn-get-started scrollto" type="submit">Confirm Changes</button>
+                            </div>
+                            
+                        </form>
+                   </div>
                 </div>
             </div>
         </div>
@@ -144,75 +171,6 @@
 
   <!-- Template Main JS File -->
   <script src="/js/main.js"></script>
-  <script>
-        var quantity = 0;
-        var totalPrice = 0;
-        updateSubmitButtonVisibility();
-
-        $(document).on('click', '#addOne', function(e) {
-            e.preventDefault();
-            quantity += 1;
-            $('#quantity').text(quantity);
-            $('#finalQuantity').val(quantity);
-
-            $('#finalTotalPrice').val(calculateTotalPrice());
-            $('#totalPrice').text(calculateTotalPrice().toLocaleString('en-PH', {
-                style: 'currency',
-                currency: 'PHP'
-            }));
-        });
-
-        $(document).on('click', '#minusOne', function(e) {
-            e.preventDefault();
-            quantity -= 1;
-            
-            $('#finalTotalPrice').val(calculateTotalPrice());
-            $('#totalPrice').text(calculateTotalPrice().toLocaleString('en-PH', {
-                style: 'currency',
-                currency: 'PHP'
-            }));
-
-            if (quantity > 0) {
-                $('#quantity').text(quantity);
-                $('#finalQuantity').val(quantity);
-            } else {
-                quantity = 0;
-                $('#quantity').text(quantity);
-                $('#finalQuantity').val(quantity);
-            }
-        });
-
-        $(document).on('input', '#payment', function() {
-            updateSubmitButtonVisibility();
-
-            $('#change').text(calculateChange().toLocaleString('en-PH', {
-                style: 'currency',
-                currency: 'PHP' 
-            }));
-
-            $('#finalChange').val(calculateChange());
-        });
-
-
-        function updateSubmitButtonVisibility() {
-            var paymentAmount = parseFloat($("#payment").val());
-
-            if (!isNaN(paymentAmount) && paymentAmount > calculateTotalPrice()) {
-                $("#submitButton").show();
-            } else {
-                $("#submitButton").hide();
-            }
-        }
-
-        function calculateTotalPrice() {
-            // return  (parseFloat($('#price').data('price')) * quantity) > 0 ? parseFloat($('#price').data('price')) * quantity : 0;
-            return parseFloat($('#price').data('price')) * quantity;
-        }
-
-        function calculateChange() {
-            return  (calculateTotalPrice() > parseFloat($('#payment').val())) ? 'Insufficient Payment!' : parseFloat($('#payment').val()) - calculateTotalPrice();
-        }
-  </script>
 </body>
 
 </html>
