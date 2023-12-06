@@ -3,29 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Products;
-class ProductsController extends Controller
+use App\Models\Bought;
+class BoughtsController extends Controller
 {
-    public function showProductTypes() {
-      
-        $productTypes = [
-            'Shorts',
-            'Jackets',
-            'T-shirts',
-            'Dress',
-            'Pants'
-        ];
-
-        return $productTypes;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Products::all();
-        return $products;
+        //
     }
 
     /**
@@ -33,19 +19,15 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-
+        dd($request->all());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(string $id)
     {
-        $product = Products::where('id', $request->id)->first();
-
-        return view('pages.products-details', compact('product'));
-        
+        //
     }
 
     /**
