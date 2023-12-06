@@ -100,11 +100,12 @@
                             </div>
                             <div class="form-group">
                                 <label for=""><strong>Payment</strong></label>
-                                <input type="number" class="form-control" id="payment">
+                                <input type="number" class="form-control" name="payment" id="payment">
                             </div>
                             <div class="form-group">
                                 <label for=""><strong>Change</strong></label>
-                                <input type="number" class="form-control" id="finalChange" name="change">
+                                <p id="change">₱ 0.00</p>
+                                <input type="number" class="form-control d-none" id="finalChange" name="change">
                             </div>
                             <div class="row justify-content-center" id="submitButton">
                                 <button class="col-10 btn btn-get-started scrollto" type="submit">Buy now</button>
@@ -155,7 +156,7 @@
             $('#finalTotalPrice').val(calculateTotalPrice());
             $('#totalPrice').text(calculateTotalPrice().toLocaleString('en-PH', {
                 style: 'currency',
-                currency: 'PHP' // Change the currency code as needed
+                currency: 'PHP'
             }));
         });
 
@@ -166,7 +167,7 @@
             $('#finalTotalPrice').val(calculateTotalPrice());
             $('#totalPrice').text(calculateTotalPrice().toLocaleString('en-PH', {
                 style: 'currency',
-                currency: 'PHP' // Change the currency code as needed
+                currency: 'PHP'
             }));
 
             if (quantity > 0) {
@@ -181,7 +182,15 @@
 
         $(document).on('input', '#payment', function() {
             updateSubmitButtonVisibility();
+
+            $('#change').text(calculateChange().toLocaleString('en-PH', {
+                style: 'currency',
+                currency: 'PHP' 
+            }));
+
+            $('#finalChange').val(calculateChange());
         });
+
 
         function updateSubmitButtonVisibility() {
             var paymentAmount = parseFloat($("#payment").val());
@@ -194,7 +203,12 @@
         }
 
         function calculateTotalPrice() {
-            return  (parseFloat($('#price').data('price')) * quantity) > 0 ? parseFloat($('#price').data('price')) * quantity : 0;
+            // return  (parseFloat($('#price').data('price')) * quantity) > 0 ? parseFloat($('#price').data('price')) * quantity : 0;
+            return parseFloat($('#price').data('price')) * quantity;
+        }
+
+        function calculateChange() {
+            return  (calculateTotalPrice() > parseFloat($('#payment').val())) ? 'Insufficient Payment!' : parseFloat($('#payment').val()) - calculateTotalPrice();
         }
   </script>
 </body>

@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/details', [ProductsController::class, 'show'])->name('product-detail');
 
     Route::post('/buy-now', [BoughtsController::class, 'store'])->name('buy-now');
+
+    Route::get('purchases', [BoughtsController::class, 'index'])->name('purchase-list');
 });
 
 
