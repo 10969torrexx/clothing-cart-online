@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -39,18 +40,33 @@ class UsersController extends Controller
      */
     public function update(Request $request)
     {
-        // return Validator::make($data, [
-       
-        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
-        // ]);
-       if ($request->changeType = 0) {
+        if ($request->changeType == 0) {
             $this->validate($request, [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users']
+            ]);
+
+            User::where('id', Auth::user()->id)
+            ->update([
+                'name' => $request->name,
             ]);
 
             return back()->with('success', 'Profile updated successfully!');
-       }
+        }
+
+        if ($request->changeType == 1) {
+            $this->validate($request, [
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users']
+            ]);
+
+            User::where('id', Auth::user()->id)
+            ->update([
+                'password' => Hash::make($request->password),
+                'email' => $request->email
+            ]);
+
+            return back()->with('success', 'Profile updated successfully!');
+        }
     }
 
     /**

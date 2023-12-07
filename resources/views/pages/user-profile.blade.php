@@ -86,7 +86,7 @@
                    <div class="col-6">
                         <form action="{{ route('info-change') }}" method="post">
                             @csrf
-                            <input type="text" name="changeType" value="0" class="form-control">
+                            <input type="text" name="changeType" hidden value="0" class="form-control">
                             <div class="form-group p-1">
                                 <label for="">Name</label>
                                 <input id="name" value="{{ $user->name }}" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
@@ -97,6 +97,19 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            
+
+                            <div class="form-group pt-2">
+                                <button class="btn btn-get-started scrollto" type="submit">Confirm Changes</button>
+                            </div>
+                            
+                        </form>
+                   </div>
+                   <div class="col-6">
+                        <form action="{{ route('info-change') }}" method="post">
+                            @csrf
+                            <input type="text" name="changeType" hidden value="1" class="form-control">
 
                             <div class="form-group p-1">
                                 <label for="">Email</label>
@@ -109,16 +122,6 @@
                                 @enderror
                             </div>
 
-                            <div class="form-group pt-2">
-                                <button class="btn btn-get-started scrollto" type="submit">Confirm Changes</button>
-                            </div>
-                            
-                        </form>
-                   </div>
-                   <div class="col-6">
-                        <form action="{{ route('info-change') }}" method="post">
-                            @csrf
-                            <input type="text" name="changeType" value="1" class="form-control">
                             <div class="form-group p-1">
                                 <label for="">Password</label>
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
