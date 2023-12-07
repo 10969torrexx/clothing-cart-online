@@ -36,6 +36,8 @@
     <!-- DataTables CSS and JS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
@@ -97,6 +99,7 @@
                                 <th>Payment</th>
                                 <th>Change</th>
                                 <th>Purchase Date</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -105,15 +108,17 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ ucwords($item->product_name) }}</td>
                                     <td>{{ $productsController->showProductTypes()[$item->category - 1] }}</td>
-                                    <td>{{ $item->price }}</td>
-                                    <td>{{ $item->quantity }}</td>
+                                    <td>₱ {{ number_format($item->price, 2, '.', ',')  }}</td>
+                                    <td>{{ $item->quantity }} pcs</td>
                                     <td>₱ {{ number_format($item->total_price, 2, '.', ',')  }}</td>
                                     <td>₱ {{ number_format($item->payment, 2, '.', ',')  }}</td>
                                     <td>₱ {{ number_format($item->change, 2, '.', ',')  }}</td>
                                     <td>{{ date('F d, Y', strtotime($item->created_at)) }}</td>
+                                    <td class="text-center">
+                                        <a href="#" id="delete-purchase" data-id="{{ $item->id }}"><i class='bx bx-trash text-danger text-center'></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
-                        
                         </tbody>
                     </table>
                 </div>
@@ -149,6 +154,49 @@
     <script>
          $(document).ready(function() {
             $('#myDataTable').DataTable();
+
+            
+        });
+
+        $(document).on('click', '#delete-purchase', function(e) {
+            e.preventDefault();
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('delete-purchase') }}",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Laravel CSRF token
+                        }, data: {
+                            'id' : $(this).data('id')
+                        },
+                        success: function (response) {
+                            if (response.status == 200) {
+                                swal(`${response.message}`, {
+                                        icon: "success",
+                                    }).then(function () {
+                                        // Reload the page when the OK button is clicked
+                                        location.reload();
+                                });
+                            }
+                           
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle any errors that occur during the request
+                            toastr.error('Cannot fetch attendance (Error: 500)');
+                        }
+                    });
+
+                }
+            });
         });
     </script>
 </body>
