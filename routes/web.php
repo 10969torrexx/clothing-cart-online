@@ -36,6 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user-profile', [UsersController::class, 'index'])->name('user-profile');
 
     Route::post('/info-change', [UsersController::class, 'update'])->name('info-change');
+
+    Route::get('/delete-purcahse', [BoughtsController::class, 'destroy'])->name('delete-purchase');
 });
 
 

@@ -66,8 +66,13 @@ class BoughtsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        Bought::where('id', $request->id)->delete();
+
+        return [
+            'status' => 200,
+            'message' => 'Purchase Deleted!'
+        ];
     }
 }
